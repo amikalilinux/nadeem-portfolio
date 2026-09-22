@@ -1,41 +1,29 @@
-import { createHash, timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
-const adminEmail = "asha03400932@gmail.com";
-const adminPasswordHash = "d2be53689200688c3dea2fb5918ad01cae9c5a4d9ebab2d2b0545b5ac66df58c";
-const sessionValue = "nadeem-admin-session";
+export async function GET() {
+  const supabase = await getSupabaseServerClient();
+  if (!supabase) return NextResponse.json({ configured: false, authenticated: false });
 
-function matchesPassword(password: string) {
-  const received = createHash("sha256").update(password).digest("hex");
-  return timingSafeEqual(Buffer.from(received), Buffer.from(adminPasswordHash));
-}
-
-export async function GET(request: NextRequest) {
-  return NextResponse.json({ authenticated: request.cookies.get("nadeem_admin")?.value === sessionValue });
+  const { data: { user } } = await supabase.auth.getUser();
+  return NextResponse.json({ configured: true, authenticated: Boolean(user), email: user?.email ?? null });
 }
 
 export async function POST(request: NextRequest) {
+  const supabase = await getSupabaseServerClient();
+  if (!supabase) return NextResponse.json({ error: "Supabase is not configured. Add the public Supabase environment variables." }, { status: 503 });
+
   const body = await request.json().catch(() => ({}));
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const password = typeof body.password === "string" ? body.password : "";
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (email !== adminEmail || !matchesPassword(password)) {
-    return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
-  }
-
-  const response = NextResponse.json({ authenticated: true });
-  response.cookies.set("nadeem_admin", sessionValue, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 8,
-    path: "/",
-  });
-  return response;
+  if (error) return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
+  return NextResponse.json({ authenticated: true });
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ authenticated: false });
-  response.cookies.delete("nadeem_admin");
-  return response;
+  const supabase = await getSupabaseServerClient();
+  if (supabase) await supabase.auth.signOut();
+  return NextResponse.json({ authenticated: false });
 }

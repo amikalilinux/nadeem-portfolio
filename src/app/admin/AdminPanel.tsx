@@ -1,6 +1,5 @@
 "use client";
 
-import Script from "next/script";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
@@ -10,9 +9,13 @@ export default function AdminPanel() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [configured, setConfigured] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/login").then((response) => response.json()).then((data) => setAuthenticated(data.authenticated)).catch(() => setAuthenticated(false));
+    fetch("/api/admin/login").then((response) => response.json()).then((data) => {
+      setConfigured(data.configured !== false);
+      setAuthenticated(data.authenticated);
+    }).catch(() => setAuthenticated(false));
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -35,6 +38,7 @@ export default function AdminPanel() {
   }
 
   if (authenticated === null) return <main className="admin-loading">Checking secure access...</main>;
+  if (!configured) return <main className="admin-login"><div className="admin-login-card"><span className="brand-mark">NJ</span><p className="eyebrow">Supabase setup required</p><h1>Admin is not connected</h1><p>Add <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to <code>.env.local</code>, then restart the server.</p><Link href="/">← Back to portfolio</Link></div></main>;
   if (!authenticated) {
     return (
       <main className="admin-login">
@@ -56,10 +60,6 @@ export default function AdminPanel() {
   }
 
   return (
-    <>
-      <button className="admin-logout" onClick={logout}>Sign out</button>
-      <Script src="https://unpkg.com/decap-cms@3.8.3/dist/decap-cms.js" strategy="afterInteractive" />
-      <main id="nc-root" aria-label="Portfolio content management dashboard" />
-    </>
+    <main className="admin-login"><div className="admin-login-card"><span className="brand-mark">NJ</span><p className="eyebrow">Supabase admin</p><h1>Signed in</h1><p>You are authenticated as the portfolio administrator. The Supabase content workspace is ready for the connected project.</p><button className="button button-primary" onClick={logout}>Sign out</button></div></main>
   );
 }
