@@ -2,6 +2,12 @@ backend:
   name: git-gateway
   branch: main
 
+site_url: /
+display_url: /
+logo_url: /admin/admin-logo.svg
+publish_mode: simple
+show_preview_links: false
+
 media_folder: public/uploads
 public_folder: /uploads
 
