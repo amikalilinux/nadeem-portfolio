@@ -1,0 +1,108 @@
+{
+  "profile": {
+    "name": "Nadeem Jamal",
+    "role": "Zoology Graduate · Research Assistant · Science Educator",
+    "shortRole": "Zoology graduate & science educator",
+    "tagline": "I study the living world, then help more people care about it.",
+    "intro": "Research-minded and field-curious, I bring scientific rigor to biodiversity work and make complex ideas feel possible to learn.",
+    "location": "Peshawar, Pakistan",
+    "email": "hello@nadeemjamal.example",
+    "photo": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=640&q=85",
+    "cv": "/nadeem-jamal-cv.pdf",
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "researchgate": "https://www.researchgate.net/",
+      "scholar": "https://scholar.google.com/",
+      "orcid": "https://orcid.org/"
+    }
+  },
+  "about": "I am a zoology graduate drawn to the questions that sit between field observation, careful research, and public understanding. My work has taken me from biodiversity assessments and data collection to supporting research teams and teaching young learners how to notice the living systems around them. I care about conservation that includes communities, not just landscapes, and I enjoy translating scientific evidence into clear, useful stories. Alongside research and education, I have contributed to community conversations around climate resilience and youth participation. Every project is a chance to become a more precise observer, a more generous collaborator, and a better bridge between science and everyday life.",
+  "stats": [
+    { "value": "3+", "label": "Years experience" },
+    { "value": "8+", "label": "Certifications" },
+    { "value": "12+", "label": "Workshops" },
+    { "value": "3", "label": "Languages" }
+  ],
+  "skills": [
+    { "title": "Research & Analysis", "icon": "⌕", "tags": ["Literature review", "Data synthesis", "Report writing"] },
+    { "title": "Lab Skills", "icon": "◌", "tags": ["Specimen handling", "Microscopy", "Sample documentation"] },
+    { "title": "Field & Conservation", "icon": "⌁", "tags": ["Biodiversity surveys", "Habitat notes", "Community ecology"] },
+    { "title": "Science Education", "icon": "◒", "tags": ["Lesson design", "STEM facilitation", "Youth engagement"] },
+    { "title": "Communication", "icon": "↗", "tags": ["Public speaking", "Scientific storytelling", "Facilitation"] },
+    { "title": "Digital & Data", "icon": "▦", "tags": ["Excel", "GIS basics", "Digital archives"] }
+  ],
+  "experience": [
+    {
+      "role": "Research Assistant",
+      "place": "[EDIT] Biodiversity Research Centre",
+      "dates": "2023 — Present",
+      "bullets": ["Supported biodiversity assessments through field observations, structured data collection, and literature review.", "Prepared clear research notes, data summaries, and presentation materials for supervisors and community partners.", "Helped maintain reliable records so field evidence could move confidently into conservation conversations."]
+    },
+    {
+      "role": "Science Educator & Workshop Facilitator",
+      "place": "[EDIT] Community Learning Network",
+      "dates": "2022 — 2023",
+      "bullets": ["Designed hands-on sessions that connected zoology, climate resilience, and local biodiversity to everyday life.", "Facilitated youth workshops for mixed-age groups, adapting activities for different learning styles.", "Built confidence in learners by making scientific observation playful, practical, and inclusive."]
+    }
+  ],
+  "education": {
+    "degree": "BSc Zoology",
+    "dates": "2019 — 2023",
+    "university": "[EDIT] University of Peshawar",
+    "grade": "[EDIT] CGPA 3.62 / 4.00",
+    "project": "Final-year project: A biodiversity assessment of urban green spaces, documenting species presence and habitat pressures across selected sites."
+  },
+  "projects": [
+    {
+      "id": "urban-biodiversity",
+      "category": "Field research",
+      "title": "Urban Biodiversity Assessment",
+      "description": "A field-led study of species presence and habitat pressures across a changing urban landscape.",
+      "tools": ["Transect walks", "Field notes", "Excel"],
+      "outcome": "Created a baseline species record and a concise set of habitat care recommendations.",
+      "image": "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1200&q=85",
+      "details": "The project combined repeated observation points with structured field notes to build a useful picture of biodiversity in everyday green spaces. It was designed to be legible to both research supervisors and community partners."
+    },
+    {
+      "id": "science-workshops",
+      "category": "Education",
+      "title": "Science In The Neighbourhood",
+      "description": "A workshop series that helped young learners explore ecology through familiar places, questions, and objects.",
+      "tools": ["Lesson plans", "Specimen stories", "Group facilitation"],
+      "outcome": "Delivered 6 sessions for learners aged 12–17 with activities they could repeat outdoors.",
+      "image": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=85",
+      "details": "Each session moved from a local observation to a larger ecological idea. Learners mapped small habitats, discussed evidence, and practiced explaining what they noticed without losing the curiosity that started the conversation."
+    },
+    {
+      "id": "climate-youth",
+      "category": "Community",
+      "title": "Youth Climate Dialogue",
+      "description": "A facilitated conversation series connecting climate resilience with the choices communities can make now.",
+      "tools": ["Dialogue design", "Visual prompts", "Reflection cards"],
+      "outcome": "Turned complex climate themes into a shared set of local questions and possible actions.",
+      "image": "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=1200&q=85",
+      "details": "The dialogue used visual prompts and small-group reflection to make space for lived experience. The emphasis was on listening first, then connecting local concerns to evidence and practical next steps."
+    }
+  ],
+  "certifications": [
+    { "title": "Good Clinical Practice", "issuer": "NIDA Clinical Trials Network", "year": "2024", "category": "Research" },
+    { "title": "Research Ethics & Human Subject Protection", "issuer": "The Global Health Network", "year": "2024", "category": "Research" },
+    { "title": "Climate Change & Resilience", "issuer": "ADB Institute", "year": "2023", "category": "Climate" },
+    { "title": "Introduction to Bioinformatics", "issuer": "[EDIT] Learning platform", "year": "2023", "category": "Digital" }
+  ],
+  "workshops": [
+    { "date": "2024", "topic": "Biodiversity conservation", "place": "[EDIT] Regional Ecology Forum", "description": "Shared a practical framework for turning field observations into community-friendly conservation stories." },
+    { "date": "2023", "topic": "Youth engagement", "place": "[EDIT] Youth Science Week", "description": "Facilitated an interactive session on how young people can ask better questions about their environment." },
+    { "date": "2023", "topic": "Research writing", "place": "[EDIT] Early Career Research Circle", "description": "Helped participants shape clear research questions, evidence trails, and readable abstracts." },
+    { "date": "2022", "topic": "Climate leadership", "place": "[EDIT] Climate Action Lab", "description": "Explored how listening, local knowledge, and scientific literacy support resilient communities." }
+  ],
+  "languages": [
+    { "name": "English", "level": "Fluent", "note": "Research, teaching & professional communication" },
+    { "name": "Urdu", "level": "Native", "note": "Community conversations & everyday life" },
+    { "name": "Pashto", "level": "Conversational", "note": "Local connection & field conversations" }
+  ],
+  "contact": {
+    "formAction": "https://formspree.io/f/[EDIT-your-form-id]",
+    "note": "Open to thoughtful collaborations in research, science education, and biodiversity work."
+  }
+}

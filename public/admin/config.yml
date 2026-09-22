@@ -1,0 +1,110 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: portfolio
+    label: Portfolio content
+    files:
+      - name: content
+        label: Site content
+        file: src/data/content.json
+        format: json
+        fields:
+          - label: Profile
+            name: profile
+            widget: object
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Role, name: role, widget: string }
+              - { label: Short role, name: shortRole, widget: string }
+              - { label: Tagline, name: tagline, widget: string }
+              - { label: Intro, name: intro, widget: text }
+              - { label: Location, name: location, widget: string }
+              - { label: Email, name: email, widget: string }
+              - { label: Photo URL, name: photo, widget: image }
+              - { label: CV file, name: cv, widget: file }
+              - label: Social links
+                name: socials
+                widget: object
+                fields:
+                  - { label: LinkedIn, name: linkedin, widget: string }
+                  - { label: ResearchGate, name: researchgate, widget: string }
+                  - { label: Google Scholar, name: scholar, widget: string }
+                  - { label: ORCID, name: orcid, widget: string }
+          - { label: About bio, name: about, widget: text }
+          - label: Stats
+            name: stats
+            widget: list
+            fields:
+              - { label: Value, name: value, widget: string }
+              - { label: Label, name: label, widget: string }
+          - label: Skills
+            name: skills
+            widget: list
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Icon, name: icon, widget: string }
+              - { label: Tags, name: tags, widget: list }
+          - label: Experience
+            name: experience
+            widget: list
+            fields:
+              - { label: Role, name: role, widget: string }
+              - { label: Place, name: place, widget: string }
+              - { label: Dates, name: dates, widget: string }
+              - { label: Bullets, name: bullets, widget: list }
+          - label: Education
+            name: education
+            widget: object
+            fields:
+              - { label: Degree, name: degree, widget: string }
+              - { label: Dates, name: dates, widget: string }
+              - { label: University, name: university, widget: string }
+              - { label: Grade, name: grade, widget: string }
+              - { label: Project, name: project, widget: text }
+          - label: Projects
+            name: projects
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: ID, name: id, widget: string }
+              - { label: Category, name: category, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Tools, name: tools, widget: list }
+              - { label: Outcome, name: outcome, widget: text }
+              - { label: Image, name: image, widget: image }
+              - { label: Details, name: details, widget: text }
+          - label: Certifications
+            name: certifications
+            widget: list
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Issuer, name: issuer, widget: string }
+              - { label: Year, name: year, widget: string }
+              - { label: Category, name: category, widget: string }
+          - label: Workshops
+            name: workshops
+            widget: list
+            fields:
+              - { label: Date, name: date, widget: string }
+              - { label: Topic, name: topic, widget: string }
+              - { label: Place, name: place, widget: string }
+              - { label: Description, name: description, widget: text }
+          - label: Languages
+            name: languages
+            widget: list
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Level, name: level, widget: string }
+              - { label: Note, name: note, widget: string }
+          - label: Contact
+            name: contact
+            widget: object
+            fields:
+              - { label: Form action, name: formAction, widget: string }
+              - { label: Note, name: note, widget: text }
