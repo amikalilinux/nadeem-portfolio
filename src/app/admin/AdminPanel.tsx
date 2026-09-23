@@ -33,7 +33,8 @@ export default function AdminPanel() {
       setAuthenticated(true);
       setPassword("");
     } else {
-      setError("Invalid email or password.");
+      const result = await response.json().catch(() => ({}));
+      setError(typeof result.error === "string" ? result.error : "The admin email or password is incorrect.");
     }
     setBusy(false);
   }

@@ -21,7 +21,15 @@ export async function POST(request: NextRequest) {
   if (email !== ADMIN_EMAIL) return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
+  if (error) {
+    const message =
+      error.code === "email_not_confirmed"
+        ? "Confirm this email address in Supabase Authentication before signing in."
+        : error.code === "user_not_found"
+          ? "Create this admin email in Supabase Authentication first."
+          : "The admin email or password is incorrect.";
+    return NextResponse.json({ error: message }, { status: 401 });
+  }
   return NextResponse.json({ authenticated: true });
 }
 
