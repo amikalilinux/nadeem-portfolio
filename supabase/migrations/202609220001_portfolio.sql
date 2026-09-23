@@ -15,13 +15,13 @@ create policy "Published portfolio content is readable"
 create policy "Authenticated admins can update portfolio content"
   on public.portfolio_content for update
   to authenticated
-  using (true)
-  with check (true);
+  using (lower(coalesce(auth.jwt() ->> 'email', '')) = 'asha03400932@gmail.com')
+  with check (lower(coalesce(auth.jwt() ->> 'email', '')) = 'asha03400932@gmail.com');
 
 create policy "Authenticated admins can insert portfolio content"
   on public.portfolio_content for insert
   to authenticated
-  with check (true);
+  with check (lower(coalesce(auth.jwt() ->> 'email', '')) = 'asha03400932@gmail.com');
 
 insert into public.portfolio_content (slug, content)
 values ('main', '{}'::jsonb)

@@ -12,7 +12,7 @@ export default function AdminPanel() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [configured, setConfigured] = useState(true);
+  const [configured, setConfigured] = useState<boolean | null>(null);
   const [contentJson, setContentJson] = useState("");
   const [contentLoading, setContentLoading] = useState(false);
   const [saveState, setSaveState] = useState("");
@@ -69,7 +69,7 @@ export default function AdminPanel() {
     }
   }
 
-  if (authenticated === null) return <main className="admin-loading">Checking secure access...</main>;
+  if (authenticated === null || configured === null) return <main className="admin-loading">Checking secure access...</main>;
   if (!configured) return <main className="admin-login"><div className="admin-login-card"><span className="brand-mark">NJ</span><p className="eyebrow">Supabase setup required</p><h1>Admin is not connected</h1><p>Add <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to <code>.env.local</code>, then restart the server.</p><Link href="/">← Back to portfolio</Link></div></main>;
   if (!authenticated) {
     return (
