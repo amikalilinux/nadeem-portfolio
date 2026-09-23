@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import content from "@/data/content.json";
+import fallbackContent from "@/data/content.json";
 
 const navItems = ["About", "Experience", "Projects", "Contact"];
 const projectFilters = ["All", "Field research", "Education", "Community"];
@@ -23,6 +23,7 @@ function SectionIntro({ eyebrow, title, copy }: { eyebrow: string; title: string
 }
 
 export default function Portfolio() {
+  const [content, setContent] = useState(fallbackContent);
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("About");
@@ -50,6 +51,12 @@ export default function Portfolio() {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/content").then((response) => response.json()).then((data) => {
+      if (data?.profile && data?.about) setContent(data);
+    }).catch(() => undefined);
   }, []);
 
   useEffect(() => {
