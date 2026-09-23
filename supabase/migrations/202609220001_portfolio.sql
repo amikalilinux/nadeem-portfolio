@@ -8,6 +8,10 @@ create table if not exists public.portfolio_content (
 
 alter table public.portfolio_content enable row level security;
 
+drop policy if exists "Published portfolio content is readable" on public.portfolio_content;
+drop policy if exists "Authenticated admins can update portfolio content" on public.portfolio_content;
+drop policy if exists "Authenticated admins can insert portfolio content" on public.portfolio_content;
+
 create policy "Published portfolio content is readable"
   on public.portfolio_content for select
   using (true);
