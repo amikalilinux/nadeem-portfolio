@@ -28,7 +28,12 @@ export async function POST(request: NextRequest) {
   const extension = file.name.split(".").pop()?.toLowerCase() || (kind === "cv" ? "pdf" : "jpg");
   const path = `${kind}/${crypto.randomUUID()}.${extension}`;
   const { error } = await supabase.storage.from("portfolio-media").upload(path, file, { contentType: file.type, upsert: false });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    if (error.message.toLowerCase().includes("bucket not found")) {
+      return NextResponse.json({ error: "Storage is not set up yet. Run the portfolio migration in the Supabase SQL Editor to create the portfolio-media bucket." }, { status: 503 });
+    }
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
   const { data } = supabase.storage.from("portfolio-media").getPublicUrl(path);
   return NextResponse.json({ url: data.publicUrl });
