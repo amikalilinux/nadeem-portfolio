@@ -31,6 +31,25 @@ insert into public.portfolio_content (slug, content)
 values ('main', '{}'::jsonb)
 on conflict (slug) do nothing;
 
+insert into storage.buckets (id, name, public)
+values ('portfolio-media', 'portfolio-media', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Public portfolio media is readable" on storage.objects;
+drop policy if exists "Admin can upload portfolio media" on storage.objects;
+
+create policy "Public portfolio media is readable"
+  on storage.objects for select
+  using (bucket_id = 'portfolio-media');
+
+create policy "Admin can upload portfolio media"
+  on storage.objects for insert
+  to authenticated
+  with check (
+    bucket_id = 'portfolio-media'
+    and lower(coalesce(auth.jwt() ->> 'email', '')) = 'asha03400932@gmail.com'
+  );
+
 create or replace function public.set_portfolio_updated_at()
 returns trigger
 language plpgsql
