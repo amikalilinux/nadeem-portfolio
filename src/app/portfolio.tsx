@@ -81,7 +81,7 @@ export default function Portfolio() {
   return (
     <main>
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="Nadeem Jamal home"><span className="brand-mark">NJ</span><span>Nadeem Jamal</span></a>
+        <a className="brand" href="#top" aria-label={`${content.profile.name} home`}><span className="brand-mark">{content.profile.logo}</span><span>{content.profile.name}</span></a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"} aria-label="Primary navigation">
           {navItems.map((item) => <button key={item} className={activeSection === item ? "active" : ""} onClick={() => scrollTo(item.toLowerCase())}>{item}</button>)}
           <button onClick={() => scrollTo("contact")} className="nav-contact">Let&apos;s talk <ArrowIcon /></button>
