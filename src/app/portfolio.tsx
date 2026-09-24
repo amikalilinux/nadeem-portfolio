@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import fallbackContent from "@/data/content.json";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 const navItems = ["About", "Experience", "Projects", "Contact"];
 const projectFilters = ["All", "Field research", "Education", "Community"];
@@ -54,9 +55,11 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/content").then((response) => response.json()).then((data) => {
-      if (data?.profile && data?.about) setContent(data);
-    }).catch(() => undefined);
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
+    supabase.from("portfolio_content").select("content").eq("slug", "main").maybeSingle().then(({ data }) => {
+      if (data?.content && typeof data.content === "object" && "profile" in data.content && "about" in data.content) setContent(data.content as typeof fallbackContent);
+    });
   }, []);
 
   useEffect(() => {
