@@ -31,22 +31,23 @@ function SectionIntro({ eyebrow, title, copy }: { eyebrow: string; title: string
 }
 
 export default function Portfolio() {
-  const [content, setContent] = useState(fallbackContent);
+  const [content, setContent] = useState<typeof fallbackContent | null>(null);
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("About");
   const [projectFilter, setProjectFilter] = useState("All");
   const [certificationFilter, setCertificationFilter] = useState("All");
   const [certificationSearch, setCertificationSearch] = useState("");
-  const [selectedProject, setSelectedProject] = useState<(typeof content.projects)[number] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<(typeof fallbackContent.projects)[number] | null>(null);
   const [showTop, setShowTop] = useState(false);
   const [loaded, setLoaded] = useState(false);
+
+  const currentContent = content ?? fallbackContent;
 
   useEffect(() => {
     const savedMode = window.localStorage.getItem("nadeem-theme");
     const frame = window.requestAnimationFrame(() => {
       setDarkMode(savedMode === "dark");
-      setLoaded(true);
     });
 
     const onScroll = () => {
@@ -64,20 +65,50 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) return;
+    let active = true;
 
-    supabase
-      .from("portfolio_content")
-      .select("content")
-      .eq("slug", "main")
-      .maybeSingle()
-      .then(({ data, error }) => {
-        if (error) return;
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) {
+      setContent(fallbackContent);
+      setLoaded(true);
+      return;
+    }
+
+    const loadContent = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("portfolio_content")
+          .select("content")
+          .eq("slug", "main")
+          .maybeSingle();
+
+        if (!active) return;
+
+        if (error) {
+          setContent(fallbackContent);
+          setLoaded(true);
+          return;
+        }
+
         if (data?.content && isPortfolioContent(data.content)) {
           setContent(data.content as PortfolioContent);
+        } else {
+          setContent(fallbackContent);
         }
-      });
+      } catch {
+        if (active) {
+          setContent(fallbackContent);
+        }
+      } finally {
+        if (active) setLoaded(true);
+      }
+    };
+
+    void loadContent();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -85,8 +116,8 @@ export default function Portfolio() {
     window.localStorage.setItem("nadeem-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  const visibleProjects = projectFilter === "All" ? content.projects : content.projects.filter((project) => project.category === projectFilter);
-  const visibleCertifications = content.certifications.filter((certification) => {
+  const visibleProjects = projectFilter === "All" ? currentContent.projects : currentContent.projects.filter((project) => project.category === projectFilter);
+  const visibleCertifications = currentContent.certifications.filter((certification) => {
     const matchesFilter = certificationFilter === "All" || certification.category === certificationFilter;
     const query = certificationSearch.toLowerCase();
     return matchesFilter && `${certification.title} ${certification.issuer}`.toLowerCase().includes(query);
@@ -109,9 +140,9 @@ export default function Portfolio() {
   return (
     <main>
       <header className="site-header">
-        <a className="brand" href="#top" aria-label={`${content.profile.name} home`}>
-          <span className="brand-mark">{content.profile.logo}</span>
-          <span>{content.profile.name}</span>
+        <a className="brand" href="#top" aria-label={`${currentContent.profile.name} home`}>
+          <span className="brand-mark">{currentContent.profile.logo}</span>
+          <span>{currentContent.profile.name}</span>
         </a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"} aria-label="Primary navigation">
           {navItems.map((item) => (
@@ -139,22 +170,22 @@ export default function Portfolio() {
           <div className="hero-copy reveal">
             <p className="eyebrow"><span className="status-dot" /> Available for meaningful work</p>
             <h1>
-              {content.profile.name.split(" ").map((name, index) => (
+              {currentContent.profile.name.split(" ").map((name, index) => (
                 <span key={name} className={index === 1 ? "accent-word" : ""}>{name} </span>
               ))}
             </h1>
-            <p className="hero-role">{content.profile.role}</p>
-            <p className="hero-tagline">{content.profile.tagline}</p>
-            <p className="hero-intro">{content.profile.intro}</p>
+            <p className="hero-role">{currentContent.profile.role}</p>
+            <p className="hero-tagline">{currentContent.profile.tagline}</p>
+            <p className="hero-intro">{currentContent.profile.intro}</p>
             <div className="hero-actions">
               <button className="button button-primary" onClick={() => scrollTo("projects")}>View my work <ArrowIcon /></button>
-              <a className="button button-secondary" href={content.profile.cv} download>
+              <a className="button button-secondary" href={currentContent.profile.cv} download>
                 Download CV <span aria-hidden="true">↓</span>
               </a>
               <button className="button button-quiet" onClick={() => scrollTo("contact")}>Contact me</button>
             </div>
             <div className="hero-meta">
-              <span>{content.profile.location}</span>
+              <span>{currentContent.profile.location}</span>
               <span className="meta-line" />
               <span>Research · Education · Conservation</span>
             </div>
@@ -162,7 +193,7 @@ export default function Portfolio() {
 
           <div className="hero-portrait reveal delay-1">
             <div className="portrait-ring">
-              <Image src={content.profile.photo} alt="Portrait of Nadeem Jamal" width={640} height={640} priority />
+              <Image src={currentContent.profile.photo} alt="Portrait of Nadeem Jamal" width={640} height={640} priority />
             </div>
             <div className="portrait-note note-one"><span className="note-symbol">✳</span><span>Curiosity<br /><strong>in practice</strong></span></div>
             <div className="portrait-note note-two"><span className="note-number">03</span><span>areas of<br /><strong>focus</strong></span></div>
@@ -174,7 +205,7 @@ export default function Portfolio() {
       <section className="section about-section" id="about">
         <SectionIntro eyebrow="01 / About" title="Science is a way of paying attention." copy="I work where research, education, and care for the living world meet." />
         <div className="about-grid">
-          <p className="about-lead">{content.about}</p>
+          <p className="about-lead">{currentContent.about}</p>
           <div className="about-side">
             <span className="quote-mark">“</span>
             <p>Good science asks better questions. Good education makes room for more people to ask them.</p>
@@ -185,7 +216,7 @@ export default function Portfolio() {
 
       <section className="stats-band">
         <div className="stats-grid">
-          {content.stats.map((stat) => (
+          {currentContent.stats.map((stat) => (
             <div className="stat reveal" key={stat.label}>
               <strong>{stat.value}</strong>
               <span>{stat.label}</span>
@@ -197,7 +228,7 @@ export default function Portfolio() {
       <section className="section" id="skills">
         <SectionIntro eyebrow="02 / Capabilities" title="A practical toolkit for curious work." copy="From a careful field note to a room full of young questions, these are the ways I contribute." />
         <div className="skills-grid">
-          {content.skills.map((skill, index) => (
+          {currentContent.skills.map((skill, index) => (
             <article className="skill-card reveal" key={skill.title}>
               <span className="skill-icon">{skill.icon}</span>
               <span className="card-index">0{index + 1}</span>
@@ -211,7 +242,7 @@ export default function Portfolio() {
       <section className="section" id="experience">
         <SectionIntro eyebrow="03 / Experience" title="Work shaped by field evidence and public trust." copy="I move between research, teaching, and collaborative problem solving." />
         <div className="timeline">
-          {content.experience.map((item) => (
+          {currentContent.experience.map((item) => (
             <article className="timeline-item reveal" key={`${item.role}-${item.place}`}>
               <div className="timeline-dot" aria-hidden="true" />
               <div className="timeline-content">
@@ -232,14 +263,14 @@ export default function Portfolio() {
         <div className="education-card reveal">
           <div>
             <p className="eyebrow">Degree</p>
-            <h3>{content.education.degree}</h3>
+            <h3>{currentContent.education.degree}</h3>
           </div>
           <div className="education-meta">
-            <span>{content.education.university}</span>
-            <span>{content.education.dates}</span>
-            <span>{content.education.grade}</span>
+            <span>{currentContent.education.university}</span>
+            <span>{currentContent.education.dates}</span>
+            <span>{currentContent.education.grade}</span>
           </div>
-          <p>{content.education.project}</p>
+          <p>{currentContent.education.project}</p>
         </div>
       </section>
 
@@ -296,11 +327,11 @@ export default function Portfolio() {
         <SectionIntro eyebrow="07 / Contact" title="Let&apos;s build something thoughtful together." copy="I’m open to research, education, and community-facing work where careful thinking matters." />
         <div className="contact-panel reveal">
           <div>
-            <p className="contact-lead">{content.contact.note}</p>
-            <a href={`mailto:${content.profile.email}`} className="contact-link">{content.profile.email}</a>
+            <p className="contact-lead">{currentContent.contact.note}</p>
+            <a href={`mailto:${currentContent.profile.email}`} className="contact-link">{currentContent.profile.email}</a>
           </div>
           <div className="contact-links">
-            {Object.entries(content.profile.socials).map(([key, value]) => (
+            {Object.entries(currentContent.profile.socials).map(([key, value]) => (
               <a key={key} href={value} target="_blank" rel="noreferrer">{key}</a>
             ))}
           </div>
