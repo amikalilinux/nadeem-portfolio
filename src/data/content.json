@@ -102,6 +102,53 @@
     { "name": "Urdu", "level": "Native", "note": "Community conversations & everyday life" },
     { "name": "Pashto", "level": "Conversational", "note": "Local connection & field conversations" }
   ],
+  "customization": {
+    "heroBackground": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80",
+    "profilePhoto": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=640&q=85",
+    "logoImage": "",
+    "logoShape": "circle",
+    "logoSize": "34px",
+    "logoTextVisible": true,
+    "headerStyle": "glass",
+    "cardRadius": "18px",
+    "buttonRadius": "999px",
+    "sectionSpacing": "clamp(82px, 10vw, 150px)",
+    "fontFamily": "Inter, Arial, sans-serif",
+    "buttonLabels": {
+      "viewWork": "View my work",
+      "downloadCv": "Download CV",
+      "contact": "Contact me",
+      "navContact": "Let's talk"
+    },
+    "whatsappNumber": "+923001112233",
+    "whatsappLink": "https://wa.me/923001112233",
+    "colors": {
+      "primary": "#0f766e",
+      "secondary": "#ccfbf1",
+      "background": "#fafaf9",
+      "card": "#ffffff",
+      "text": "#0f172a",
+      "muted": "#64748b",
+      "border": "#dbe7e3",
+      "accent": "#f59e0b",
+      "footer": "#0f172a",
+      "highlight": "#dbeafe"
+    },
+    "textStyles": {
+      "heroTitle": { "size": "clamp(62px, 9vw, 122px)", "weight": 600, "color": "#0f172a" },
+      "heroRole": { "size": "13px", "weight": 700, "color": "#0f766e" },
+      "heroTagline": { "size": "clamp(24px, 3vw, 39px)", "weight": 600, "color": "#0f172a" },
+      "heroIntro": { "size": "15px", "weight": 400, "color": "#64748b" },
+      "nav": { "size": "13px", "weight": 600, "color": "#0f172a" },
+      "button": { "size": "12px", "weight": 700, "color": "#ffffff" },
+      "sectionTitle": { "size": "clamp(40px, 5vw, 66px)", "weight": 600, "color": "#0f172a" },
+      "sectionCopy": { "size": "15px", "weight": 400, "color": "#64748b" },
+      "aboutLead": { "size": "clamp(27px, 3.1vw, 43px)", "weight": 500, "color": "#0f172a" },
+      "cardTitle": { "size": "26px", "weight": 600, "color": "#0f172a" },
+      "body": { "size": "15px", "weight": 400, "color": "#0f172a" },
+      "meta": { "size": "11px", "weight": 400, "color": "#64748b" }
+    }
+  },
   "contact": {
     "formAction": "https://formspree.io/f/[EDIT-your-form-id]",
     "note": "Open to thoughtful collaborations in research, science education, and biodiversity work."

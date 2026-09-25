@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import fallbackContent from "@/data/content.json";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
@@ -18,6 +18,20 @@ function ArrowIcon() {
 
 function isPortfolioContent(value: unknown): value is PortfolioContent {
   return Boolean(value && typeof value === "object" && "profile" in value && "about" in value);
+}
+
+function mergePortfolioContent(value: PortfolioContent): PortfolioContent {
+  return {
+    ...fallbackContent,
+    ...value,
+    customization: {
+      ...fallbackContent.customization,
+      ...value.customization,
+      colors: { ...fallbackContent.customization.colors, ...value.customization?.colors },
+      textStyles: { ...fallbackContent.customization.textStyles, ...value.customization?.textStyles },
+      buttonLabels: { ...fallbackContent.customization.buttonLabels, ...value.customization?.buttonLabels },
+    },
+  };
 }
 
 function SectionIntro({ eyebrow, title, copy }: { eyebrow: string; title: string; copy?: string }) {
@@ -43,6 +57,56 @@ export default function Portfolio() {
   const [loaded, setLoaded] = useState(false);
 
   const currentContent = content ?? fallbackContent;
+  const customization = currentContent.customization ?? fallbackContent.customization;
+  const themeVars: CSSProperties = {
+    "--teal": customization.colors.primary,
+    "--mint": customization.colors.secondary,
+    "--paper": customization.colors.background,
+    "--ink": customization.colors.text,
+    "--muted": customization.colors.muted,
+    "--line": customization.colors.border,
+    "--card": customization.colors.card,
+    "--accent": customization.colors.accent,
+    "--highlight": customization.colors.highlight,
+    "--footer": customization.colors.footer,
+    "--card-radius": customization.cardRadius,
+    "--button-radius": customization.buttonRadius,
+    "--section-spacing": customization.sectionSpacing,
+    "--custom-font": customization.fontFamily,
+    "--hero-title-size": customization.textStyles.heroTitle.size,
+    "--hero-title-weight": customization.textStyles.heroTitle.weight,
+    "--hero-title-color": customization.textStyles.heroTitle.color,
+    "--hero-role-size": customization.textStyles.heroRole.size,
+    "--hero-role-weight": customization.textStyles.heroRole.weight,
+    "--hero-role-color": customization.textStyles.heroRole.color,
+    "--hero-tagline-size": customization.textStyles.heroTagline.size,
+    "--hero-tagline-weight": customization.textStyles.heroTagline.weight,
+    "--hero-tagline-color": customization.textStyles.heroTagline.color,
+    "--hero-intro-size": customization.textStyles.heroIntro.size,
+    "--hero-intro-color": customization.textStyles.heroIntro.color,
+    "--nav-size": customization.textStyles.nav.size,
+    "--nav-weight": customization.textStyles.nav.weight,
+    "--nav-color": customization.textStyles.nav.color,
+    "--button-size": customization.textStyles.button.size,
+    "--button-weight": customization.textStyles.button.weight,
+    "--button-color": customization.textStyles.button.color,
+    "--section-title-size": customization.textStyles.sectionTitle.size,
+    "--section-title-weight": customization.textStyles.sectionTitle.weight,
+    "--section-title-color": customization.textStyles.sectionTitle.color,
+    "--section-copy-size": customization.textStyles.sectionCopy.size,
+    "--section-copy-color": customization.textStyles.sectionCopy.color,
+    "--about-lead-size": customization.textStyles.aboutLead.size,
+    "--about-lead-weight": customization.textStyles.aboutLead.weight,
+    "--about-lead-color": customization.textStyles.aboutLead.color,
+    "--card-title-size": customization.textStyles.cardTitle.size,
+    "--card-title-weight": customization.textStyles.cardTitle.weight,
+    "--card-title-color": customization.textStyles.cardTitle.color,
+    "--body-size": customization.textStyles.body.size,
+    "--body-weight": customization.textStyles.body.weight,
+    "--body-color": customization.textStyles.body.color,
+    "--meta-size": customization.textStyles.meta.size,
+    "--meta-color": customization.textStyles.meta.color,
+  } as CSSProperties;
 
   useEffect(() => {
     const savedMode = window.localStorage.getItem("nadeem-theme");
@@ -91,7 +155,7 @@ export default function Portfolio() {
         }
 
         if (data?.content && isPortfolioContent(data.content)) {
-          setContent(data.content as PortfolioContent);
+          setContent(mergePortfolioContent(data.content as PortfolioContent));
         } else {
           setContent(fallbackContent);
         }
@@ -138,11 +202,18 @@ export default function Portfolio() {
   }
 
   return (
-    <main>
-      <header className="site-header">
+    <main style={themeVars}>
+      <header className={`site-header header-style-${customization.headerStyle}`}>
         <a className="brand" href="#top" aria-label={`${currentContent.profile.name} home`}>
-          <span className="brand-mark">{currentContent.profile.logo}</span>
-          <span>{currentContent.profile.name}</span>
+          <span
+            className={`brand-mark logo-shape-${customization.logoShape}`}
+            style={{ width: customization.logoSize, height: customization.logoSize }}
+          >
+            {customization.logoImage ? (
+              <Image src={customization.logoImage} alt="" width={96} height={96} unoptimized />
+            ) : currentContent.profile.logo}
+          </span>
+          {customization.logoTextVisible && <span>{currentContent.profile.name}</span>}
         </a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"} aria-label="Primary navigation">
           {navItems.map((item) => (
@@ -151,7 +222,7 @@ export default function Portfolio() {
             </button>
           ))}
           <button onClick={() => scrollTo("contact")} className="nav-contact">
-            Let&apos;s talk <ArrowIcon />
+            {customization.buttonLabels.navContact} <ArrowIcon />
           </button>
         </nav>
         <div className="header-actions">
@@ -164,7 +235,15 @@ export default function Portfolio() {
         </div>
       </header>
 
-      <section className="hero" id="top">
+      <section
+        className="hero"
+        id="top"
+        style={{
+          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 42, 0.38), rgba(15, 23, 42, 0.62)), url("${customization.heroBackground}")`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      >
         <div className="hero-pattern" aria-hidden="true"><span /><span /><span /><span /><span /></div>
         <div className="hero-content">
           <div className="hero-copy reveal">
@@ -178,11 +257,11 @@ export default function Portfolio() {
             <p className="hero-tagline">{currentContent.profile.tagline}</p>
             <p className="hero-intro">{currentContent.profile.intro}</p>
             <div className="hero-actions">
-              <button className="button button-primary" onClick={() => scrollTo("projects")}>View my work <ArrowIcon /></button>
+              <button className="button button-primary" onClick={() => scrollTo("projects")}>{customization.buttonLabels.viewWork} <ArrowIcon /></button>
               <a className="button button-secondary" href={currentContent.profile.cv} download>
-                Download CV <span aria-hidden="true">↓</span>
+                {customization.buttonLabels.downloadCv} <span aria-hidden="true">↓</span>
               </a>
-              <button className="button button-quiet" onClick={() => scrollTo("contact")}>Contact me</button>
+              <button className="button button-quiet" onClick={() => scrollTo("contact")}>{customization.buttonLabels.contact}</button>
             </div>
             <div className="hero-meta">
               <span>{currentContent.profile.location}</span>
@@ -193,7 +272,7 @@ export default function Portfolio() {
 
           <div className="hero-portrait reveal delay-1">
             <div className="portrait-ring">
-              <Image src={currentContent.profile.photo} alt="Portrait of Nadeem Jamal" width={640} height={640} priority />
+              <Image src={customization.profilePhoto || currentContent.profile.photo} alt="Portrait of Nadeem Jamal" width={640} height={640} priority />
             </div>
             <div className="portrait-note note-one"><span className="note-symbol">✳</span><span>Curiosity<br /><strong>in practice</strong></span></div>
             <div className="portrait-note note-two"><span className="note-number">03</span><span>areas of<br /><strong>focus</strong></span></div>
@@ -331,6 +410,9 @@ export default function Portfolio() {
             <a href={`mailto:${currentContent.profile.email}`} className="contact-link">{currentContent.profile.email}</a>
           </div>
           <div className="contact-links">
+            {customization.whatsappLink && (
+              <a href={customization.whatsappLink} target="_blank" rel="noreferrer">WhatsApp</a>
+            )}
             {Object.entries(currentContent.profile.socials).map(([key, value]) => (
               <a key={key} href={value} target="_blank" rel="noreferrer">{key}</a>
             ))}
